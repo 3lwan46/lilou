@@ -51,6 +51,20 @@ def start():
 # functions
 
 def search_recipe():
+    import csv
+
+
+def search_recipe():
+    with open("recipes.csv", "r") as file:
+        reader = csv.reader(file)
+        next(reader)  
+        ingredient = input("Enter ingredient: ").lower()
+        
+        for row in reader:
+            ingredients = row[1].lower().split(",")
+            if ingredient in [i.strip() for i in ingredients]:
+                print(row[0], "-", row[1], "ingredients")
+
     print(">>> Search Recipe function called")
 
 def view_all():
