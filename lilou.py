@@ -67,7 +67,7 @@ def start():
 
 # functions
 #-----------------------------------------------------------------------------------------
-def search_recipe(): #works but have issues, plz fix
+def search_recipe(): #works but have issues, plz fix - fixing
     with open("recipes.csv", "r") as file:
         reader = csv.reader(file)
         next(reader)  
