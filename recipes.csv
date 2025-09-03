@@ -1,21 +1,4 @@
 Recipe Name,Ingredients,Preparation Time (minutes),Cooking Instructions,Difficulty Level,Categorize,Customer Rate
-Spaghetti Carbonara,"Spaghetti, Eggs, Parmesan cheese, Pancetta, Black pepper, Salt",20,Boil spaghetti. Fry pancetta. Mix eggs with cheese. Combine all and season with pepper.,Medium,Lunch/Dinner,4.5
-Chicken Salad,"Chicken breast, Lettuce, Tomato, Cucumber, Olive oil, Lemon juice, Salt, Pepper",15,Grill chicken. Chop vegetables. Mix all ingredients with dressing.,Easy,Lunch/Dinner,4.7
-Pancakes,"Flour, Eggs, Milk, Sugar, Baking powder, Butter, Salt",25,Mix dry ingredients. Add eggs and milk. Cook batter on skillet until golden.,Easy,Breakfast,4.6
-Beef Stir Fry,"Beef strips, Soy sauce, Garlic, Onion, Bell peppers, Broccoli, Olive oil",30,Fry beef with garlic and onion. Add vegetables and soy sauce. Stir fry until cooked.,Medium,Lunch/Dinner,4.4
-Vegetable Soup,"Carrots, Celery, Onion, Potato, Tomato, Garlic, Vegetable broth, Salt, Pepper",40,Chop vegetables. Boil in broth. Season with salt and pepper.,Easy,Dinner,4.3
-Grilled Cheese Sandwich,"Bread, Butter, Cheddar cheese",10,Butter bread. Place cheese in between slices. Grill until golden brown.,Easy,Snack/Breakfast,4.2
-Caesar Salad,"Romaine lettuce, Croutons, Parmesan cheese, Caesar dressing",15,Chop lettuce. Add croutons and cheese. Toss with dressing.,Easy,Lunch/Dinner,4.5
-Tomato Pasta,"Pasta, Tomato sauce, Garlic, Olive oil, Basil, Salt",20,Boil pasta. Cook sauce with garlic and tomatoes. Combine and garnish with basil.,Easy,Lunch/Dinner,4.6
-Chicken Curry,"Chicken breast, Curry powder, Onion, Garlic, Tomato, Coconut milk, Salt",35,Cook chicken with onion and garlic. Add curry powder and coconut milk. Simmer.,Medium,Dinner,4.5
-Omelette,"Eggs, Onion, Tomato, Bell peppers, Cheese, Salt, Pepper",10,Beat eggs. Fry with vegetables. Add cheese and season.,Easy,Breakfast,4.7
-Tuna Sandwich,"Tuna, Mayonnaise, Bread, Lettuce",10,Mix tuna with mayonnaise. Place between bread slices with lettuce.,Easy,Snack/Lunch,4.3
-Fried Rice,"Rice, Soy sauce, Egg, Carrot, Peas, Onion, Sesame oil",25,Cook rice. Fry with vegetables and egg. Add soy sauce and sesame oil.,Medium,Lunch/Dinner,4.4
-Lentil Soup,"Lentils, Carrot, Celery, Onion, Garlic, Tomato paste, Vegetable broth, Salt",40,Boil lentils with vegetables and broth. Blend if desired. Season.,Easy,Dinner,4.5
-Chocolate Cake,"Flour, Cocoa powder, Sugar, Eggs, Butter, Baking powder, Milk",60,Mix dry ingredients. Add wet ingredients. Bake at 180°C for 40 minutes.,Hard,Dessert/Snack,4.8
-Garlic Bread,"Baguette, Butter, Garlic, Parsley, Salt",15,Slice baguette. Spread garlic butter. Bake until golden.,Easy,Snack/Dinner,4.4
-Shrimp Scampi,"Shrimp, Garlic, Lemon juice, Butter, Parsley, Olive oil, Spaghetti",25,"Cook shrimp with garlic, butter, and lemon. Toss with spaghetti.",Medium,Dinner,4.6
-Greek Salad,"Cucumber, Tomato, Onion, Feta cheese, Olives, Olive oil, Oregano",15,Chop vegetables. Mix with feta and olives. Add olive oil and oregano.,Easy,Lunch/Dinner,4.5
-Mashed Potatoes,"Potatoes, Butter, Milk, Salt, Pepper",30,"Boil potatoes. Mash with butter, milk, salt, and pepper.",Easy,Side/Dinner,4.3
-BBQ Ribs,"Pork ribs, BBQ sauce, Garlic, Onion, Olive oil, Salt, Pepper",120,Season ribs. Bake slowly. Add BBQ sauce and grill.,Hard,Dinner,4.7
-Fish Tacos,"Fish fillets, Tortillas, Cabbage, Lime, Sour cream, Salsa",30,"Cook fish. Assemble tacos with cabbage, salsa, and sour cream.",Medium,Lunch/Dinner,4.5
+Spaghetti Carbonara,Spaghetti=200g; Eggs=2; Parmesan cheese=50g; Pancetta=100g; Black pepper=1 tsp; Salt=1 pinch,20,Boil spaghetti. Fry pancetta. Mix eggs with cheese. Combine all and season with pepper.,Medium,Lunch/Dinner,4.5
+Chicken Salad,Chicken breast=150g; Lettuce=1; Tomato=1; Cucumber=1; Olive oil=2 tbsp; Lemon juice=1 tbsp; Salt=1 pinch; Pepper=1 pinch,15,Grill chicken. Chop vegetables. Mix all ingredients with dressing.,Easy,Lunch/Dinner,4.7
+Pancakes,Flour=200g;    Eggs=7;    Milk=250ml;    Sugar=2 tbsp;    Baking powder=1 tsp;    Butter=50g;    Salt=1 pinch,25,Mix dry ingredients. Add eggs and milk. Cook batter on skillet until golden.,Easy,Breakfast,4.6
