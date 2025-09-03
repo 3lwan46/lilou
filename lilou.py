@@ -30,7 +30,7 @@ def menu():
     print("8. Exit")
     
 
-with open("recipes.csv", "r", encoding="utf-8") as f:
+with open("recipes_updated.csv", "r", encoding="utf-8") as f:
     reader = csv.DictReader(f)
     print("CSV headers:", reader.fieldnames)
 
