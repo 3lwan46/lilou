@@ -1,5 +1,6 @@
 import csv
 import random
+import re
 
 def banner():
     print("""
@@ -18,13 +19,14 @@ def banner():
 
 def menu():
 
-    print("\nHi, Please select an option:\n")
+    print("\nWelcome to LILOU, Please select an option:\n")
     print("1. Add a new recipe to the collection")
     print("2. Search for recipes by ingredient")
     print("3. View all recipes")
     print("4. View a random recipe suggestion")
     print("5. generate a shopping list")
     print("6. Sorting Recipes by Rating")
+    print("7. edit ingredients")
     print("8. Exit")
     
 
@@ -40,6 +42,7 @@ def start():
         menu()
         choice = input("\nEnter your choice (1-8): ")
 
+
         if choice == "1":
             add_recipe()
         elif choice == "2":
@@ -52,6 +55,8 @@ def start():
             shopping_list()
         elif choice=="6":
             view_sorted_by_rating()
+        elif choice=="7":
+            edit_ingredients()
         elif choice == "8":
             print("Goodbye!")
             break
@@ -77,10 +82,7 @@ def search_recipe(): #works but have issues, plz fix
 #-----------------------------------------------------------------------------------------
 def view_all(): 
     print(">>> View All Recipes function called")# write the function here
-import csv
 
-
-def recipes_table():
     with open("recipes.csv","r") as file:
         reader = csv.reader(file)
         head = next(reader)
@@ -90,8 +92,6 @@ def recipes_table():
         print(".."*50)
         for row in reader:
             print(f"{row[0]:20}{row[1]:40}{row[2]:20}")
-       
-recipes_table()
 
 #-----------------------------------------------------------------------------------------
 def random_recipe(filename="recipes.csv"):# make sure its run
@@ -150,6 +150,62 @@ def shopping_list(filename="recipes.csv"):# all good
 #-----------------------------------------------------------------------------------------
 ###-- add function ... 
 
+#-----------------------------------------------------------------------------------------
+#to scale ingredient quantities based on desired number of servings 
+def edit_ingredients(filename="recipes.csv"):
+    # Read the recipes from the CSV file
+    with open(filename, mode='r') as file:
+        reader = csv.DictReader(file)
+        recipes = list(reader)
+
+    # Get the recipe name from the user
+    recipe_name = input("Enter the recipe name: ")
+    
+    # Find the recipe
+    recipe = next((r for r in recipes if r['Recipe Name'].lower() == recipe_name.lower()), None)
+    
+    if not recipe:
+        print("Recipe not found!")
+        return
+
+    # Display the ingredients
+    ingredients = recipe['Ingredients'].split(';')
+    print("Current ingredients:")
+    for ing in ingredients:
+        print(ing.strip())
+
+    # Get the ingredient to edit
+    ingredient_to_edit = input("Enter the ingredient to edit: ")
+    
+    # Find the ingredient
+    ingredient = next((ing for ing in ingredients if ingredient_to_edit.lower() in ing.lower()), None)
+    
+    if not ingredient:
+        print("Ingredient not found!")
+        return
+
+    # Get the updated quantity
+    updated_qty = input("Enter the updated quantity (with unit): ")
+    
+    # Update the ingredient
+    current_name = ingredient.split('=')[0]
+    updated_ingredient = f"{current_name}={updated_qty}"
+
+    # Update the ingredients list
+    ingredients = [updated_ingredient if ing == ingredient else ing for ing in ingredients]
+    
+    # Update the recipe
+    recipe['Ingredients'] = '; '.join(ingredients)
+
+    # Write the updated recipes back to the CSV file
+    with open(filename, mode='w', newline='') as file:
+        fieldnames = recipes[0].keys()
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        writer.writerows(recipes)
+
+    print("\nIngredient updated successfully!\n")
 
 #-----------------------------------------------------------------------------------------
 def view_sorted_by_rating(filename="recipes.csv"):# works good
