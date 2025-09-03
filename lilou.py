@@ -64,8 +64,12 @@ def view_all():
     print(">>> View All Recipes function called")
 
 def random_recipe():
-    print(">>> Random Recipe function called")
-
+    def random_recipe():
+        with open("recipes.csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            recipes = list(reader)
+            r=random.choice(recipes)
+            print(r)
 
 
 def add_recipe(filename="recipes.csv"):
