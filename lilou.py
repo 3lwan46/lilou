@@ -61,7 +61,7 @@ def start():
 
 
 # functions
-
+#-----------------------------------------------------------------------------------------
 def search_recipe(): #works but have issues, plz fix
     with open("recipes.csv", "r") as file:
         reader = csv.reader(file)
@@ -73,10 +73,13 @@ def search_recipe(): #works but have issues, plz fix
             if ingredient in [i.strip() for i in ingredients]:
                 print(row[0], "-", row[1], "ingredients")
 
+
+#-----------------------------------------------------------------------------------------
 def view_all(): 
     print(">>> View All Recipes function called")# write the function here
 
 
+#-----------------------------------------------------------------------------------------
 def random_recipe(filename="recipes.csv"):# make sure its run
     try:
         with open(filename, mode="r", newline="", encoding="utf-8") as file:
@@ -103,6 +106,7 @@ def random_recipe(filename="recipes.csv"):# make sure its run
 
 
 
+#-----------------------------------------------------------------------------------------
 def shopping_list(filename="recipes.csv"):# all good
     print("\nWelcome to shopping list!")
     recipe_name = input("Which recipe would you like to buy? Enter the name: ")
@@ -129,9 +133,11 @@ def shopping_list(filename="recipes.csv"):# all good
 
 
 
+#-----------------------------------------------------------------------------------------
 ###-- add function ... 
 
 
+#-----------------------------------------------------------------------------------------
 def view_sorted_by_rating(filename="recipes.csv"):# works good
     try:
         with open(filename, "r") as f:
