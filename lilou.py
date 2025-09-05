@@ -57,7 +57,19 @@ def start():
             view_sorted_by_rating()
         elif choice=="7":
             edit_ingredients()
-        elif choice == "8":
+        elif choice=="8":
+         while True:
+             result = cooking()
+             if result == "again":
+                    continue
+             elif result == "menu":
+                    break 
+             elif result == "exit":
+                    print ("Goodbye!")
+                    return
+             else:
+                    break 
+        elif choice == "9":
             print("Goodbye!")
             break
 
@@ -228,6 +240,138 @@ def view_sorted_by_rating(filename="recipes.csv"):# works good
 
     except FileNotFoundError:
         print("recipes.csv not found.")
+#-----------------------------------------------------------------------------------------
+def cooking(filename="recipes.csv"):
+
+    # Load all recipes from the file
+    with open(filename, "r", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        recipes = list(reader)
+
+    if not recipes:
+        print("No recipes found.")
+        return
+
+    # Show recipe names
+    print("\nAvailable Recipes:")
+    for i, r in enumerate(recipes, start=1):
+        print(f"{i}. {r['Recipe Name']}")
+
+    # Let user select recipe
+    choice = input("\nEnter the recipe name you want to cook: ").strip()
+    selected = None
+    for r in recipes:
+        if r["Recipe Name"].strip().lower() == choice.lower():
+            selected = r
+            break
+
+    if not selected:
+        print("Recipe not found.")
+        return
+
+    # Ask for amount/servings
+    try:
+        amount = int(input("Enter the number of servings/pieces you want to cook: "))
+        if amount < 1:
+            print("Amount must be at least 1.")
+            return
+    except ValueError:
+        print("Invalid number.")
+        return
+
+    # Parse ingredients
+    ingredients_dict = {}
+    for part in selected["Ingredients"].split(";"):
+        if "=" in part:
+            name, qty = part.split("=")
+            ingredients_dict[name.strip()] = qty.strip()
+
+    # Scale ingredients
+    scaled = {}
+    for item, qty in ingredients_dict.items():
+        # extract first number (assumes user wrote numeric qty at start)
+        match = re.match(r"(\d+\.?\d*)(.*)", qty) #عشان يطلع الارقام من قسم المكونات ويحسبهم حسبب الكمية الي اليوزر يحددها
+        if match:
+            number = float(match.group(1)) * amount
+            unit = match.group(2)
+            scaled[item] = f"{number:.2f}{unit}"
+        else:
+            scaled[item] = qty  # leave as-is if no number found
+
+    # Display scaled ingredients
+    print(f"\nIngredients for {amount} servings of {selected['Recipe Name']}:")
+    for item, qty in scaled.items():
+        print(f"{item}: {qty}")
+
+
+    #Save user logs 
+    def add_user_choice_to_file(line, logs):
+        with open(logs, "a") as f:
+          f.write(f"{line}\n")
+          print(f"Successfully appended to {logs}")
+        
+    log_line = (
+        f"Cooked: {selected['Recipe Name']} | "
+        f"servings={amount} | "
+        f"items={len(scaled)} | "
+        f"category={selected['Categorize']}"
+        )
+    add_user_choice_to_file(log_line, "logs.csv")
+
+    #Suggest Recipes
+    def suggest_recipes():
+        count_breakfast = 0 
+        count_dinner = 0 
+        count_lunch = 0
+        with open("logs.csv", "r") as f:
+            lines = f.readlines()
+
+        for line in lines:            
+                if "category=Breakfast" in line:   
+                    count_breakfast = count_breakfast + 1
+                elif "category=Lunch" in line:
+                    count_lunch = count_lunch+1
+                elif "category=Dinner" in line:
+                    count_dinner= count_dinner+1
+        breakfast_recipes = []
+        lunch_recipes = []
+        dinner_recipes = []
+        with open("recipes.csv","r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                category = row["Categorize"].strip()
+                if category.lower() == "breakfast":
+                    breakfast_recipes.append(row["Recipe Name"])
+                elif category.lower() == "lunch":
+                    lunch_recipes.append(row["Recipe Name"])
+                elif category.lower() == "dinner":
+                    dinner_recipes.append(row["Recipe Name"])
+
+        if count_breakfast > 5 and breakfast_recipes:
+            suggest = random.choice(breakfast_recipes)
+            print("You cooked a lot of Breakfast recipes!")
+            print(f"Suggestion: {suggest}")
+        elif count_lunch >5 and lunch_recipes:
+            suggest = random.choice(lunch_recipes)
+            print("You cooked a lot of Lunch recipes!")
+            print(f"Suggestion: {suggest}")
+        elif count_dinner >5 and dinner_recipes:
+            suggest = random.choice(dinner_recipes)
+            print("You cooked a lot of Dinner recipes!")
+            print(f"Suggestion: {suggest}")
+        else:
+            print("Keep cooking more and I'll suggest new recipes")
+    
+    suggest_recipes()
+
+
+    #Ask the user again 
+    ask= input("Do you want to cook another recipe? (yes/no):").strip().lower()
+    if ask == "yes":
+        return "again"
+
+    next_input = input("Do you want to exit or return to menu? (exit/menu): ").strip().lower()
+    return next_input
 
 # Run program
 start()
