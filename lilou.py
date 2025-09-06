@@ -27,7 +27,9 @@ def menu():
     print("5. generate a shopping list")
     print("6. Sorting Recipes by Rating")
     print("7. edit ingredients")
-    print("8. Exit")
+    print("8. cooking time ;)")
+    print("9. Suggest")
+    print("10. Exit")
     
 
 with open("recipes_updated.csv", "r", encoding="utf-8") as f:
@@ -40,7 +42,7 @@ def start():
     banner()   # print once
     while True:
         menu()
-        choice = input("\nEnter your choice (1-8): ")
+        choice = input("\nEnter your choice (1-9): ")
 
 
         if choice == "1":
@@ -70,6 +72,9 @@ def start():
              else:
                     break 
         elif choice == "9":
+            suggest_recipes()
+            
+        elif choice == "10":
             print("Goodbye!")
             break
 
@@ -362,8 +367,6 @@ def cooking(filename="recipes.csv"):
         else:
             print("Keep cooking more and I'll suggest new recipes")
     
-    suggest_recipes()
-
 
     #Ask the user again 
     ask= input("Do you want to cook another recipe? (yes/no):").strip().lower()
