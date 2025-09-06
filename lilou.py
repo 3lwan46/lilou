@@ -20,15 +20,15 @@ def banner():
 def menu():
 
     print("\nWelcome to LILOU, Please select an option:\n")
-    print("1. Add a new recipe to the collection")
-    print("2. Search for recipes by ingredient")
-    print("3. View all recipes")
-    print("4. View a random recipe suggestion")
-    print("5. generate a shopping list")
+    print("1. 🍕🍔🌭🍳 Add a new recipe to the collection")
+    print("2. 🔍Search for recipes by ingredient")
+    print("3. 👀View all recipes")
+    print("4. 📄View a random recipe suggestion")
+    print("5. Generate a shopping list")
     print("6. Sorting Recipes by Rating")
-    print("7. edit ingredients")
-    print("8. cooking time ;)")
-    print("9. Suggest")
+    print("7. Edit ingredients")
+    print("8. ⏲️Cooking time ;)")
+    print("9. ✨Suggest")
     print("10. Exit")
     
 
@@ -322,50 +322,6 @@ def cooking(filename="recipes.csv"):
         f"category={selected['Categorize']}"
         )
     add_user_choice_to_file(log_line, "logs.csv")
-
-    #Suggest Recipes
-    def suggest_recipes():
-        count_breakfast = 0 
-        count_dinner = 0 
-        count_lunch = 0
-        with open("logs.csv", "r") as f:
-            lines = f.readlines()
-
-        for line in lines:            
-                if "category=Breakfast" in line:   
-                    count_breakfast = count_breakfast + 1
-                elif "category=Lunch" in line:
-                    count_lunch = count_lunch+1
-                elif "category=Dinner" in line:
-                    count_dinner= count_dinner+1
-        breakfast_recipes = []
-        lunch_recipes = []
-        dinner_recipes = []
-        with open("recipes.csv","r") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                category = row["Categorize"].strip()
-                if category.lower() == "breakfast":
-                    breakfast_recipes.append(row["Recipe Name"])
-                elif category.lower() == "lunch":
-                    lunch_recipes.append(row["Recipe Name"])
-                elif category.lower() == "dinner":
-                    dinner_recipes.append(row["Recipe Name"])
-
-        if count_breakfast > 5 and breakfast_recipes:
-            suggest = random.choice(breakfast_recipes)
-            print("You cooked a lot of Breakfast recipes!")
-            print(f"Suggestion: {suggest}")
-        elif count_lunch >5 and lunch_recipes:
-            suggest = random.choice(lunch_recipes)
-            print("You cooked a lot of Lunch recipes!")
-            print(f"Suggestion: {suggest}")
-        elif count_dinner >5 and dinner_recipes:
-            suggest = random.choice(dinner_recipes)
-            print("You cooked a lot of Dinner recipes!")
-            print(f"Suggestion: {suggest}")
-        else:
-            print("Keep cooking more and I'll suggest new recipes")
     
 
     #Ask the user again 
@@ -375,6 +331,81 @@ def cooking(filename="recipes.csv"):
 
     next_input = input("Do you want to exit or return to menu? (exit/menu): ").strip().lower()
     return next_input
+#---------------------------------------------------------------------------------------------------
+    #Suggest Recipes
+
+def suggest_recipes():
+    
+    count_breakfast = 0 
+    count_dinner = 0 
+    count_lunch = 0
+
+    try:
+        with open("logs.csv", "r") as f:
+            lines = f.readlines()
+
+            logs_length = len(lines)
+
+            start_index = logs_length - 7
+            while start_index < logs_length:
+                line = lines[start_index]        
+                if "category=Breakfast" in line:   
+                    count_breakfast = count_breakfast + 1
+                elif "category=Lunch" in line:
+                    count_lunch = count_lunch + 1
+                elif "category=Dinner" in line:
+                    count_dinner = count_dinner + 1
+                start_index += 1
+    except FileNotFoundError:
+        print('logs.csv not found.')
+        return
+    except Exception as e:
+        print(f'Error while reading logs.csv: {e}')
+        return
+
+    breakfast_recipes = []
+    lunch_recipes = []
+    dinner_recipes = []
+        
+    try:
+        with open("recipes.csv", "r") as file:
+            reader = csv.DictReader(file)
+            
+            for row in reader:
+                try:
+                    category = row["Categorize"].strip()
+                    if category.lower() == "breakfast":
+                        breakfast_recipes.append(row["Recipe Name"])
+                    elif category.lower() == "lunch":
+                        lunch_recipes.append(row["Recipe Name"])
+                    elif category.lower() == "dinner":
+                        dinner_recipes.append(row["Recipe Name"])
+                except KeyError:
+                    print("recipes.csv is missing 'Categorize' or 'Recipe Name' columns.")
+                    return
+    except FileNotFoundError:
+        print("recipes.csv not found.")
+        return
+    except Exception as e:
+        print(f"Error while reading recipes.csv: {e}")
+        return
+
+    least_cooked_category = min([count_breakfast, count_lunch, count_dinner])
+    if count_breakfast == least_cooked_category and breakfast_recipes:
+        suggest = random.choice(breakfast_recipes)
+        print("You cooked a lot of Breakfast recipes!")
+        print(f"Suggestion: {suggest}")
+    elif count_lunch == least_cooked_category and lunch_recipes:
+        suggest = random.choice(lunch_recipes)
+        print("You cooked a lot of Lunch recipes!")
+        print(f"Suggestion: {suggest}")
+    elif count_dinner == least_cooked_category and dinner_recipes:
+        suggest = random.choice(dinner_recipes)
+        print("You cooked a lot of Dinner recipes!")
+        print(f"Suggestion: {suggest}")
+    else:
+        print("Keep cooking more and I'll suggest new recipes")
+
 
 # Run program
 start()
