@@ -87,21 +87,23 @@ def start():
 
 def search_recipe(filename="recipes.csv"):
     ingredient = input("Enter ingredient to search: ").strip().lower()
-    with open(filename, "r") as file:
-        reader = csv.DictReader(file)
-        found = False
 
+    with open(filename, "r", encoding="utf-8-sig") as file:
+        reader = csv.DictReader(file)
+
+        found = False
         for row in reader:
-            # check if the search word exists anywhere in Ingredients (case-insensitive)
+            if row["Recipe Name"] == "Recipe Name":
+                continue  
+
             if ingredient in row["Ingredients"].lower():
-                print("\n" + "="*40)
-                print(f"🍽️ Recipe: {row['Recipe Name']}")
-                print(f"🥗 Ingredients: {row['Ingredients']}")
+                print("-----------------------------------------------------------------------------------------")
+                print(f"🍽️  Recipe: {row['Recipe Name']}")
+                print(f"🥗  Ingredients: {row['Ingredients']}")
                 found = True
 
         if not found:
             print(f"\n❌ No recipes found containing '{ingredient}'.")
-
 
 #-----------------------------------------------------------------------------------------
 def view_all(): # to print name and time only
