@@ -42,7 +42,7 @@ def start():
     banner()
     while True:
         menu()
-        choice = input("\nEnter your choice (1-9): ")
+        choice = input("\nEnter your choice (1-10): ")
 
 
         if choice == "1":
@@ -84,7 +84,6 @@ def start():
 
 # functions:
 #-----------------------------------------------------------------------------------------
-
 def search_recipe(filename="recipes.csv"):
     ingredient = input("Enter ingredient to search: ").strip().lower()
 
@@ -116,17 +115,23 @@ def view_all(): # to print name and time only
             print(f"{row[0]:40}{row[2]:20}")
 
 #-----------------------------------------------------------------------------------------
-def random_recipe(filename="recipes.csv"):# make sure its run
+
+def random_recipe(filename="recipes.csv"):
     try:
-        with open(filename, mode="r", newline="", encoding="utf-8") as file:
-            reader = csv.DictReader(file) #converts each row into a dictionary
-            recipes = list(reader)  # converts to a list so we  can sort and loop 
+        with open(filename, mode="r", newline="", encoding="utf-8-sig") as file:
+            reader = csv.DictReader(file)
+            recipes = []
+
+            for row in reader:
+                if row["Recipe Name"] == "Recipe Name":
+                    continue
+                recipes.append(row)
 
             if not recipes:
                 print("No recipes found in your collection.")
                 return
 
-            recipe = random.choice(recipes)  # pick random recipe
+            recipe = random.choice(recipes)
             print("\n--- Random Recipe Suggestion ---")
             print(f"Recipe Name: {recipe['Recipe Name']}")
             print(f"Ingredients: {recipe['Ingredients']}")
@@ -139,7 +144,6 @@ def random_recipe(filename="recipes.csv"):# make sure its run
 
     except FileNotFoundError:
         print(f"Error: The file '{filename}' was not found.")
-
 
 
 #-----------------------------------------------------------------------------------------
@@ -206,75 +210,99 @@ def shopping_list(filename="recipes.csv"):
 
 #-----------------------------------------------------------------------------------------
 ###-- add function ... 
-def  add_recipe() :
+
+
+def add_recipe():
+    # Define the correct headers
+    headers = ['Recipe Name','Ingredients','Preparation Time (minutes)',
+               'Cooking Instructions','Difficulty Level','Categorize','Customer Rate']
+
+    # Create file if it doesn't exist
     try:
         with open('recipes.csv', 'r', newline='', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-    except:
+            pass
+    except FileNotFoundError:
         with open('recipes.csv', 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow([
-                'Recipe Name',
-                'Ingredients',
-                'Preparation Time (minutes)',
-                'Instructions',
-                'Difficulty'
-            ])
-            print('\n\nnew recipes.csv created')
+            writer.writerow(headers)
+            print('New recipes.csv created.')
+
     print("\n=== Add a New Recipe ===")
-    j=0
-    while j<1 :
-        name = input("Enter the recipe name : ")
-        j=j+1
-        if(not name.isalpha()) :
-            print ( " Enter a correct name ")
-            j=0
-    m =[]
-    while True :
-        x= input("Enter the ingredients and Type 'Exit' when you are finished :  ")
-        if x == 'Exit' :
+
+    # Recipe Name
+    while True:
+        name = input("Enter the recipe name: ").strip()
+        if name:
             break
-        if not (x.isalpha() or (any(c.isalpha() for c in x) and any(c.isdigit() for c in x))):
-             print("Invalid ingredients")
-        else :
-               m.append(x)
-    Ingredients = ",".join(m)
-    while True :
-        try :
-            Preparation = int(input( " enter your Preparation Time (minutes) :"))
-            if Preparation <= 0 :
-                print(" please Enter positive preparation time (in minutes) ")
-            else :
+        print("Please enter a valid name.")
+
+    # Ingredients
+    ingredients_list = []
+    while True:
+        ing = input("Enter an ingredient (or type 'Exit' to finish): ").strip()
+        if ing.lower() == 'exit':
+            break
+        if ing:
+            ingredients_list.append(ing)
+    Ingredients = "; ".join(ingredients_list)
+
+    # Preparation Time
+    while True:
+        try:
+            prep_time = int(input("Enter Preparation Time (minutes): "))
+            if prep_time > 0:
                 break
-        except :
-            print("please enter your number as Integer")
-    Instructions = input  ( " enter your Instructions : ")
-    i=0
-    while i<1 :
-        try :
-            x= int(input ( " enter your Difficulty as number ( 1-Easy , 2-Medium , 3-Hard ) : "))
-            if(x==1):
+        except ValueError:
+            pass
+
+    # Cooking Instructions
+    Instructions = input("Enter Cooking Instructions: ").strip()
+
+    # Difficulty Level
+    while True:
+        try:
+            diff = int(input("Enter Difficulty (1-Easy, 2-Medium, 3-Hard): "))
+            if diff == 1:
                 Difficulty = 'Easy'
-                i=1
-            elif(x==2) :
+            elif diff == 2:
                 Difficulty = 'Medium'
-                i=1
-            elif(x==3) :
+            elif diff == 3:
                 Difficulty = 'Hard'
-                i=1
-            else :
-                print ('invalid number')
-        except :
-            print ("Please enter a valid number (1, 2, or 3)")
-    new_recipes  = {'Recipe Name' : name,
-    'Ingredients' : Ingredients ,
-    'Preparation Time (minutes)' : Preparation  ,
-    'Instructions' : Instructions ,
-    'Difficulty' : Difficulty }
-    with open('recipes.csv', 'a', newline='') as file:
-        fn = [  'Recipe Name', 'Ingredients', 'Preparation Time (minutes)', 'Instructions', 'Difficulty' ]
-        writer = csv.DictWriter(file, fieldnames=fn)
-        writer.writerow(new_recipes)
+            else:
+                continue
+            break
+        except ValueError:
+            continue
+
+    # Category
+    Categorize = input("Enter Category (Breakfast/Lunch/Dinner/Snack/Dessert): ").strip()
+
+    # Customer Rate
+    while True:
+        try:
+            Customer_Rate = float(input("Enter Customer Rate (0.0 to 5.0): "))
+            if 0 <= Customer_Rate <= 5:
+                break
+        except ValueError:
+            continue
+
+    # Prepare the dictionary
+    new_recipe = {
+        'Recipe Name': name,
+        'Ingredients': Ingredients,
+        'Preparation Time (minutes)': prep_time,
+        'Cooking Instructions': Instructions,
+        'Difficulty Level': Difficulty,
+        'Categorize': Categorize,
+        'Customer Rate': Customer_Rate
+    }
+
+    # Append to CSV
+    with open('recipes.csv', 'a', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=headers)
+        writer.writerow(new_recipe)
+
+    print(f"\n✅ Recipe '{name}' added successfully!")
 
 #-----------------------------------------------------------------------------------------
 #to edit ingredient quantities based on desired number of servings 
@@ -342,23 +370,32 @@ def edit_ingredients(filename="recipes.csv"):
 #-----------------------------------------------------------------------------------------
 def view_sorted_by_rating(filename="recipes.csv"):
     try:
-        with open(filename, "r", encoding="utf-8") as f:
+        with open(filename, "r", encoding="utf-8-sig") as f:  # utf-8-sig removes hidden BOM chars
             reader = csv.DictReader(f)
+
+            # normalize headers (remove spaces, lowercase)
+            field_map = {name.strip().lower(): name for name in reader.fieldnames}
+            name_field = field_map.get("recipe name")
+            rate_field = field_map.get("customer rate")
+
             recipes = list(reader)
 
         if not recipes:
             print("No recipes available.")
             return
 
-        recipes.sort(key=lambda recipe: recipe["Customer Rate"], reverse=True)# sort by the rate from top..
+        # sort by rating, default to 0 if missing
+        recipes.sort(key=lambda r: float(r.get(rate_field, 0) or 0), reverse=True)
 
         print("\n[ Recipes Sorted by Rating ]")
         for recipe in recipes:
-            print(f"{recipe['Recipe Name']} - {recipe['Rate']} ⭐")
+            print(f"{recipe[name_field]} - {recipe[rate_field]} ⭐")
         print("------------------------------")
 
     except FileNotFoundError:
-        print("recipes.csv not found!")
+        print("recipes.csv not found.")
+
+
 
 #-----------------------------------------------------------------------------------------
 def cooking(filename="recipes.csv"):
@@ -449,6 +486,8 @@ def cooking(filename="recipes.csv"):
     #Suggest Recipes
 
 def suggest_recipes():
+    import csv, random
+
     count_breakfast = 0 
     count_dinner = 0 
     count_lunch = 0
@@ -457,15 +496,12 @@ def suggest_recipes():
     try:
         with open("logs.csv", "r") as f:
             lines = f.readlines()
-
             logs_length = len(lines)
             if logs_length == 0:
                 print("📂 No cooking history found in logs yet.")
                 return
 
-            # make sure we don’t go below index 0
             start_index = max(0, logs_length - 7)
-
             while start_index < logs_length:
                 line = lines[start_index].strip()
                 if "category=Breakfast" in line:
@@ -486,23 +522,29 @@ def suggest_recipes():
     breakfast_recipes = []
     lunch_recipes = []
     dinner_recipes = []
-        
+
     try:
-        with open("recipes.csv", "r") as file:
+        with open("recipes.csv", "r", encoding="utf-8-sig") as file:
             reader = csv.DictReader(file)
-            
+
+            # Normalize headers
+            field_map = {name.strip().lower(): name for name in reader.fieldnames}
+            name_field = field_map.get("recipe name")
+            category_field = field_map.get("categorize")
+
+            if not name_field or not category_field:
+                print("❌ CSV is missing 'Recipe Name' or 'Categorize' column.")
+                return
+
             for row in reader:
-                try:
-                    category = row["Categorize"].strip().lower()
-                    if "breakfast" in category:
-                        breakfast_recipes.append(row["Recipe Name"])
-                    if "lunch" in category:
-                        lunch_recipes.append(row["Recipe Name"])
-                    if "dinner" in category:
-                        dinner_recipes.append(row["Recipe Name"])
-                except KeyError:
-                    print("❌ recipes.csv is missing 'Categorize' or 'Recipe Name' columns.")
-                    return
+                category = row[category_field].strip().lower()
+                if "breakfast" in category:
+                    breakfast_recipes.append(row[name_field])
+                if "lunch" in category:
+                    lunch_recipes.append(row[name_field])
+                if "dinner" in category:
+                    dinner_recipes.append(row[name_field])
+
     except FileNotFoundError:
         print("❌ recipes.csv not found.")
         return
@@ -511,19 +553,17 @@ def suggest_recipes():
         return
 
     # --- Step 3: Suggest recipe based on least cooked category ---
-    least_cooked_category = min(count_breakfast, count_lunch, count_dinner)
-
     if count_breakfast == count_lunch == count_dinner == 0:
         print("📂 No categories found in recent logs.")
         return
 
-    # Collect all categories that are least cooked
+    least_cooked = min(count_breakfast, count_lunch, count_dinner)
     least_categories = []
-    if count_breakfast == least_cooked_category:
+    if count_breakfast == least_cooked:
         least_categories.append(("Breakfast", breakfast_recipes))
-    if count_lunch == least_cooked_category:
+    if count_lunch == least_cooked:
         least_categories.append(("Lunch", lunch_recipes))
-    if count_dinner == least_cooked_category:
+    if count_dinner == least_cooked:
         least_categories.append(("Dinner", dinner_recipes))
 
     if least_categories:
@@ -536,7 +576,6 @@ def suggest_recipes():
             print(f"⚠️ No recipes available for {category}.")
     else:
         print("Keep cooking more and I'll suggest new recipes.")
-
 
 # Run program
 start()
